@@ -29,6 +29,10 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
+Route::post('/signature/add', 'SignatureController@store');
+Route::get('/signature/user', 'SignatureController@usersig');
+Route::delete('/signature/delete', 'SignatureController@destroy');
+
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
