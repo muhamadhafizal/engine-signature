@@ -26,3 +26,12 @@ Route::delete('/user/delete', 'UserController@destroy');
 //Login
 Route::get('/login', 'LoginController@index');
 Route::post('/login', 'LoginController@main');
+
+Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
+
+Route::group(['middleware' => ['auth:api','token']], function(){
+    
+    //signature
+    Route::get('/signature', 'SignatureController@index');
+
+});

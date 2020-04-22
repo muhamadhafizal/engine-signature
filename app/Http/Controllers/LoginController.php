@@ -30,7 +30,8 @@ class LoginController extends Controller
 
             if($user){
 
-                return response()->json(['status'=>'success', 'api_key'=>'0', 'value' => $user]);
+                $token = $user->createToken('MyApp')-> accessToken;
+                return response()->json(['status'=>'success', 'api_key'=>$token, 'value' => $user]);
 
             } else {
 
@@ -41,5 +42,8 @@ class LoginController extends Controller
         }
 
     }
-}
 
+    public function unauthorized(){
+        return response()->json(['error'=>'Unauthorised'], 401); 
+    }
+}
