@@ -23,5 +23,6 @@ class VerifyCsrfToken extends Middleware
         'login',
         'signature/*',
         'document/*',
+        'receivedocument/*',
     ];
 }

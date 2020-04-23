@@ -84,6 +84,7 @@ class DocumentController extends Controller
             'file' => $dirfile,
             'userid' => $data->userid,
             'cc' => $cc,
+            'status' => $data->status,
         ];
 
         return response()->json(['status'=>'success', 'value'=>$tempArray]);
@@ -178,6 +179,7 @@ class DocumentController extends Controller
                 'file' => $dirfile,
                 'userid' => $data->userid,
                 'cc' => $data->cc,
+                'status' => $data->status,
             ];
 
             array_push($finalArray,$tempArray);

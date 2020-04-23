@@ -29,16 +29,6 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
-//document
-Route::get('/document', 'DocumentController@index');
-Route::post('/document/add', 'DocumentController@store');
-Route::get('/document/details', 'DocumentController@details');
-Route::post('/document/edit', 'DocumentController@update');
-Route::delete('/document/delete', 'DocumentController@destroy');
-Route::get('/document/all', 'DocumentController@all');
-Route::get('/document/user', 'DocumentController@userdoc');
-
-
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
@@ -47,5 +37,20 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/signature/details', 'SignatureController@details');
     Route::get('/signature/user', 'SignatureController@usersig');
     Route::delete('/signature/delete', 'SignatureController@destroy');
+
+
+    //document
+    Route::get('/document', 'DocumentController@index');
+    Route::post('/document/add', 'DocumentController@store');
+    Route::get('/document/details', 'DocumentController@details');
+    Route::post('/document/edit', 'DocumentController@update');
+    Route::delete('/document/delete', 'DocumentController@destroy');
+    Route::get('/document/all', 'DocumentController@all');
+    Route::get('/document/user', 'DocumentController@userdoc');
+
+    //receive document
+    Route::get('/receivedocument', 'ReceivedocumentController@index');
+    Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
+    Route::post('/receivedocument/userupdate', 'ReceivedocumentController@userupdate');
 
 });
