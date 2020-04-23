@@ -71,12 +71,34 @@ class SignatureController extends Controller
 
     }
 
+    public function details(Request $request){
+
+        $env = 'http://engine-signature.test/';
+        $id = $request->input('id');
+
+        $data = Signature::find($id);
+
+        $tempfile = $data->file;
+        $dirfile = $env . 'signaturefile/'. $tempfile;
+
+        $detailsArray = [
+
+            'id' => $data->id,
+            'signature' => $dirfile,
+            'userid' => $data->userid,
+        ];
+
+        return response()->json(['status'=>'success', 'value'=>$detailsArray]);
+
+    }
+
     public function destroy(Request $request) {
+
 		$signatureid = $request->input('signatureid');
 		$signature = Signature::find($signatureid);
 		$signature->delete($signature->id);
 
-		return response()->json(['statys'=>'success']);
+		return response()->json(['status'=>'success']);
 
 	}
 }
