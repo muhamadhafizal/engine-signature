@@ -16,7 +16,10 @@ class MydocumentController extends Controller
     public function personal(Request $request){
 
         $userid = $request->input('userid');
-        $env = 'http://engine-signature.test/';
+
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
         $finalArray = array();
 
         $document = Document::where('userid',$userid)->whereNull('cc')->get();
@@ -58,7 +61,9 @@ class MydocumentController extends Controller
 
         $userid = $request->input('userid');
         $finalArray = array();
-        $env = 'http://engine-signature.test/';
+
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
 
         $document = Document::where('userid',$userid)->whereNotNull('cc')->where('status','finish')->get();
 

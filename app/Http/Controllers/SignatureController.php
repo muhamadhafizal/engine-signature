@@ -47,7 +47,8 @@ class SignatureController extends Controller
 
     public function usersig(Request $request){
         
-        $env = 'http://engine-signature.test/';
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
 
         $finalArray = array();
         $userid = $request->input('userid');
@@ -73,7 +74,9 @@ class SignatureController extends Controller
 
     public function details(Request $request){
 
-        $env = 'http://engine-signature.test/';
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
         $id = $request->input('id');
 
         $data = Signature::find($id);

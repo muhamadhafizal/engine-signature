@@ -15,7 +15,9 @@ class ReceivedocumentController extends Controller
 
     public function userrecdoc(Request $request){
         
-        $env = 'http://engine-signature.test/';
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
         $tempArray = array();
         $documentArray = array();
         $userid = $request->input('userid');
@@ -62,7 +64,9 @@ class ReceivedocumentController extends Controller
 
     public function userupdate(Request $request){
 
-        $env = 'http://engine-signature.test/';
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
         $id = $request->input('id');
         $userid = $request->input('userid');
         $answer = null;
