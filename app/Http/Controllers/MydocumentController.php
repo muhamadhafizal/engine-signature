@@ -113,7 +113,7 @@ class MydocumentController extends Controller
 
             $user = User::find($data->userid);
 
-            $time = date('Y-m-d h:i:sa', strtotime($data->updated_at));
+            $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
 
             $historycreated = [
                 'userid' => $user->id,

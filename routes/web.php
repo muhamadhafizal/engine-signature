@@ -29,8 +29,6 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
-Route::get('/mydocument/group', 'MydocumentController@group');
-
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
@@ -58,6 +56,6 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     //mydocument
     Route::get('/mydocument', 'MydocumentController@index');
     Route::get('/mydocument/personal', 'MydocumentController@personal');
+    Route::get('/mydocument/group', 'MydocumentController@group');
     
-
 });
