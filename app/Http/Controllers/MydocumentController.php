@@ -61,13 +61,34 @@ class MydocumentController extends Controller
 
         $userid = $request->input('userid');
         $finalArray = array();
+        $tempArray = array();
 
         // $env = 'http://engine-signature.test/';
         $env = 'http://52.74.178.166:82/';
 
-        $document = Document::where('userid',$userid)->whereNotNull('cc')->where('status','finish')->get();
+        $document = Document::whereNotNull('cc')->where('status','finish')->get();
 
-        foreach($document as $data){
+        foreach($document as $data){  
+            if($data->userid == $userid){
+                array_push($tempArray,$data);
+            }
+            if($data->cc){
+
+                $a = $data->cc;
+                $b = json_decode($a,true);
+                $length = count($b['cc']);
+
+                for($i=0; $i<$length; $i++){
+                    if($userid == $b['cc'][$i]['id']){
+                        if($b['cc'][$i]['status'] == 'success'){
+                            array_push($tempArray,$data);
+                        }
+                    }   
+                }
+            }
+        }
+
+        foreach($tempArray as $data){
             $historyArray = array();
             $a = $data->cc;
             $b = json_decode($a,true);
@@ -80,6 +101,7 @@ class MydocumentController extends Controller
                 $timecc = $b['cc'][$i]['time'];
 
                 $temphistoryArray = [
+                    'userid' => $tempuser->id,
                     'name' => $tempuser->name,
                     'time' => $timecc,
                 ];
@@ -94,7 +116,7 @@ class MydocumentController extends Controller
             $time = date('Y-m-d h:i:sa', strtotime($data->updated_at));
 
             $historycreated = [
-
+                'userid' => $user->id,
                 'name' => $user->name,
                 'time' => $time,
             ];
