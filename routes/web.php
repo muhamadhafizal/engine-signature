@@ -29,11 +29,6 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
-//mydocument
-Route::get('/mydocument', 'MydocumentController@index');
-Route::get('/mydocument/personal', 'MydocumentController@personal');
-Route::get('/mydocument/group', 'MydocumentController@group');
-
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
@@ -57,5 +52,10 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/receivedocument', 'ReceivedocumentController@index');
     Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
     Route::post('/receivedocument/userupdate', 'ReceivedocumentController@userupdate');
+
+    //mydocument
+    Route::get('/mydocument', 'MydocumentController@index');
+    Route::get('/mydocument/personal', 'MydocumentController@personal');
+    Route::get('/mydocument/group', 'MydocumentController@group');
 
 });
