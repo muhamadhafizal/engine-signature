@@ -45,7 +45,7 @@ class UserController extends Controller
             if($userExist){
 
                 $message = 'email or phone is exist';
-                return response()->json(['status' => 'failed', 'data'=> $message]);
+                return response()->json(['status' => 'failed', 'value'=> $message]);
                 
             } else {
 
@@ -70,7 +70,7 @@ class UserController extends Controller
 
         $profile = User::find($userid);
 
-        return response()->json(['status'=>'success', 'data'=>$profile]);
+        return response()->json(['status'=>'success', 'value'=>$profile]);
 
     }
 

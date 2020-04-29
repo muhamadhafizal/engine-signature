@@ -29,6 +29,11 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
+//verify
+Route::get('/verify', 'VerifyController@index');
+Route::post('/verify/requesttac', 'VerifyController@requesttac');
+Route::post('/verify/sendtac', 'VerifyController@sendtac');
+
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
@@ -47,6 +52,8 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::delete('/document/delete', 'DocumentController@destroy');
     Route::get('/document/all', 'DocumentController@all');
     Route::get('/document/user', 'DocumentController@userdoc');
+    Route::get('/document/detailstosign', 'DocumentController@detailstosign');
+    Route::post('/document/successsign', 'DocumentController@successsign');
 
     //receive document
     Route::get('/receivedocument', 'ReceivedocumentController@index');

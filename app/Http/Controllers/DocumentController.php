@@ -31,11 +31,7 @@ class DocumentController extends Controller
             $documentfile = $request->file('documentfile');
             $cc = $request->input('cc');
 
-            if($cc){
-                $status = 'process';
-            } else {
-                $status = 'finish';
-            }
+            $status = 'process';
 
             $extenstion = $documentfile->getClientOriginalExtension();
             $filename = rand(11111, 99999) . '.' . $extenstion;
@@ -190,6 +186,95 @@ class DocumentController extends Controller
 
         return response()->json(['status'=>'success', 'value'=>$finalArray]);
 
+    }
+
+    public function detailstosign(Request $request){
+
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
+        $validator = validator::make($request->all(),
+        [
+            'docid' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        } else {
+
+            $docid = $request->input('docid');
+
+            $document = Document::find($docid);
+
+            if($document){
+
+                $tempfile = $document->file;
+                $dirfile = $env . 'document/'. $tempfile;
+
+                if($document->cc){
+                    $cc = json_decode($document->cc);
+                } else {
+                    $cc = $document->cc;
+                }
+                
+                $tempArray = [
+                    'id' => $document->id,
+                    'title' => $document->title,
+                    'file' => $dirfile,
+                    'userid' => $document->userid,
+                    'cc' => $cc,
+                    'status' => $document->status,
+                ];
+        
+                return response()->json(['status'=>'success', 'value'=>$tempArray]);
+
+            } else {
+                return response()->json(['status'=>'failed', 'value'=>'document not exist']);
+            }
+        }
+    }
+
+    public function successsign(Request $request){
+
+        $validator = validator::make($request->all(),
+        [
+            'docid' => 'required',
+            'documentfile' => 'required|mimes:doc,docx,pdf',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        } else {
+
+            $docid = $request->input('docid');
+            $documentfile = $request->file('documentfile');
+
+            $document = Document::find($docid);
+
+            if($document){
+
+                $extenstion = $documentfile->getClientOriginalExtension();
+                $filename = rand(11111, 99999) . '.' . $extenstion;
+                $destinationPath = 'document';
+    
+                $documentfile->move($destinationPath, $filename);
+
+                if($document->cc){
+                    $status = 'process';
+                } else {
+                    $status = 'finish';
+                }
+
+                $document->status = $status;
+                $document->file = $filename;
+
+                $document->save();
+
+                return response()->json(['status'=>'success']);
+            } else {
+                return response()->json(['status'=>'failed', 'value'=>'document not exist']);
+            }
+        }
     }
    
 }
