@@ -29,11 +29,6 @@ Route::post('/login', 'LoginController@main');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
-//verify
-Route::get('/verify', 'VerifyController@index');
-Route::post('/verify/requesttac', 'VerifyController@requesttac');
-Route::post('/verify/sendtac', 'VerifyController@sendtac');
-
 Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
@@ -64,5 +59,10 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/mydocument', 'MydocumentController@index');
     Route::get('/mydocument/personal', 'MydocumentController@personal');
     Route::get('/mydocument/group', 'MydocumentController@group');
+
+    //verify
+    Route::get('/verify', 'VerifyController@index');
+    Route::post('/verify/requesttac', 'VerifyController@requesttac');
+    Route::post('/verify/sendtac', 'VerifyController@sendtac');
     
 });
