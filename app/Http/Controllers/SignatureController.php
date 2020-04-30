@@ -17,7 +17,7 @@ class SignatureController extends Controller
         $validator = validator::make($request->all(),
         [
             'userid' => 'required',
-            'signaturefile' => 'required|mimes:doc,docx,pdf',
+            'signaturefile' => 'required|mimes:jpeg,jpg,png,PNG',
         ]);
 
         if ($validator->fails()){

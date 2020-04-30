@@ -33,10 +33,11 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     
     //signature
     Route::get('/signature', 'SignatureController@index');
-    Route::post('/signature/add', 'SignatureController@store');
+    
     Route::get('/signature/details', 'SignatureController@details');
     Route::get('/signature/user', 'SignatureController@usersig');
     Route::delete('/signature/delete', 'SignatureController@destroy');
+    Route::post('/signature/add', 'SignatureController@store');
 
 
     //document
@@ -49,6 +50,7 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/document/user', 'DocumentController@userdoc');
     Route::get('/document/detailstosign', 'DocumentController@detailstosign');
     Route::post('/document/successsign', 'DocumentController@successsign');
+    Route::get('/document/listtosign', 'DocumentController@listtosign');
 
     //receive document
     Route::get('/receivedocument', 'ReceivedocumentController@index');

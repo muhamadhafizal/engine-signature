@@ -276,5 +276,56 @@ class DocumentController extends Controller
             }
         }
     }
+
+    public function listtosign(Request $request){
+
+        // $env = 'http://engine-signature.test/';
+        $env = 'http://52.74.178.166:82/';
+
+        $validator = validator::make($request->all(),
+        [
+            'userid' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 422);
+        } else {
+
+            $userid = $request->input('userid');
+            $finalArray = array();
+
+            $document = Document::where('userid',$userid)->where('status','process')->get();
+            
+            if($document){
+
+                foreach($document as $data){
+
+                    $tempfile = $data->file;
+                    $dirfile = $env . 'document/'. $tempfile;
+
+                    if($data->cc){
+                        $data->cc = json_decode($data->cc);
+                    }
+
+                    $tempArray = [
+                        'id' => $data->id,
+                        'title' => $data->title,
+                        'file' => $dirfile,
+                        'userid' => $data->userid,
+                        'cc' => $data->cc,
+                        'status' => $data->status,
+                    ];
+                    
+                    array_push($finalArray,$tempArray);
+
+                }
+                return response()->json(['status'=>'success','value'=>$finalArray]);
+
+            } else {
+                return response()->json(['status'=>'failed','document'=>'document does not exist']);
+            }
+
+        }
+    }
    
 }
