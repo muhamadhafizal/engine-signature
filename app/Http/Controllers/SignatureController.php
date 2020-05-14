@@ -17,7 +17,6 @@ class SignatureController extends Controller
         $validator = validator::make($request->all(),
         [
             'userid' => 'required',
-            'signaturefile' => 'required|mimes:jpeg,jpg,png,PNG',
         ]);
 
         if ($validator->fails()){
@@ -26,12 +25,34 @@ class SignatureController extends Controller
 
             $userid = $request->input('userid');
             $signaturefile = $request->file('signaturefile');
+            $signaturebase64 = $request->input('signaturebase64');
 
-            $extenstion = $signaturefile->getClientOriginalExtension();
-            $filename = rand(11111, 99999) . '.' .$extenstion;
-            $destinationPath = 'signaturefile';
+            if($signaturefile){
 
-            $signaturefile->move($destinationPath, $filename);
+                $extenstion = $signaturefile->getClientOriginalExtension();
+                $filename = rand(11111, 99999) . '.' .$extenstion;
+                $destinationPath = 'signaturefile';
+
+                $signaturefile->move($destinationPath, $filename);
+
+            } elseif($signaturebase64){
+
+                $b64 = $signaturebase64;
+                
+                $bin = base64_decode($b64);
+                $im = imageCreateFromString($bin);
+                if (!$im) {
+                    die('Base64 value is not a valid image');
+                  }
+                $filename = rand(11111, 99999). '.png';
+            
+                $img_file = 'signaturefile/' .$filename;
+
+                imagepng($im, $img_file, 0);
+
+
+            }
+            
 
             $signature = new Signature;
             $signature->userid = $userid;
