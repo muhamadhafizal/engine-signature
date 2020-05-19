@@ -4,6 +4,7 @@
 /public/signaturefile
 /storage/*.key
 /vendor
+/public/document
 .env
 .env.backup
 .phpunit.result.cache
