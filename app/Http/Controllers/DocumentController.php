@@ -32,6 +32,7 @@ class DocumentController extends Controller
             $cc = $request->input('cc');
 
             $status = 'process';
+            $tempstatus = 'process';
 
             $extenstion = $documentfile->getClientOriginalExtension();
             $filename = rand(11111, 99999) . '.' . $extenstion;
@@ -45,6 +46,7 @@ class DocumentController extends Controller
             $document->userid = $userid;
             $document->cc = $cc;
             $document->status = $status;
+            $document->tempstatus = $tempstatus;
 
             $document->save();
 
@@ -251,6 +253,8 @@ class DocumentController extends Controller
 
             $document = Document::find($docid);
 
+            $tempstatus = 'success';
+
             if($document){
 
                 $extenstion = $documentfile->getClientOriginalExtension();
@@ -267,6 +271,7 @@ class DocumentController extends Controller
 
                 $document->status = $status;
                 $document->file = $filename;
+                $document->tempstatus = $tempstatus;
 
                 $document->save();
 
@@ -294,7 +299,7 @@ class DocumentController extends Controller
             $userid = $request->input('userid');
             $finalArray = array();
 
-            $document = Document::where('userid',$userid)->where('status','process')->get();
+            $document = Document::where('userid',$userid)->where('tempstatus','process')->get();
             
             if($document){
 
