@@ -74,7 +74,7 @@ class DocumentController extends Controller
 
     public function details(Request $request){
 
-        $env = $this->getenv('local');
+        $env = $this->getenv('live');
 
         $id = $request->input('id');
 
@@ -174,7 +174,7 @@ class DocumentController extends Controller
 
     public function userdoc(Request $request){
 
-        $env = $this->getenv('local');
+        $env = $this->getenv('live');
 
         $finalArray = array();
         $userid = $request->input('userid');
@@ -208,7 +208,7 @@ class DocumentController extends Controller
 
     public function detailstosign(Request $request){
 
-        $env = $this->getenv('local');
+        $env = $this->getenv('live');
 
         $validator = validator::make($request->all(),
         [
@@ -299,7 +299,7 @@ class DocumentController extends Controller
 
     public function listtosign(Request $request){
 
-        $env = $this->getenv('local');
+        $env = $this->getenv('live');
 
         $validator = validator::make($request->all(),
         [
