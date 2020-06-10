@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class DocumentController extends Controller
 {
+
+    public function getenv($type){
+        if($type == 'local'){
+            $env = 'http://engine-signature.test/';
+        } else {
+            $env = 'http://52.74.178.166:82/';
+        }
+    }
+    
     public function index(){
         return response()->json('document engine');
     }
@@ -19,6 +28,7 @@ class DocumentController extends Controller
         [
             'title' => 'required',
             'userid' => 'required',
+            'categoryid' => 'required',
             'documentfile' => 'required|mimes:doc,docx,pdf',
         ]);
 
@@ -30,10 +40,15 @@ class DocumentController extends Controller
             $userid = $request->input('userid');
             $documentfile = $request->file('documentfile');
             $cc = $request->input('cc');
+            $categoryid = $request->input('categoryid');
 
+            if($categoryid == '3'){
+                $tempstatus = 'success';
+            } else {
+                $tempstatus = 'process';
+            }
+            
             $status = 'process';
-            $tempstatus = 'process';
-
             $extenstion = $documentfile->getClientOriginalExtension();
             $filename = rand(11111, 99999) . '.' . $extenstion;
             $destinationPath = 'document';
@@ -47,6 +62,7 @@ class DocumentController extends Controller
             $document->cc = $cc;
             $document->status = $status;
             $document->tempstatus = $tempstatus;
+            $document->category = $categoryid;
 
             $document->save();
 
@@ -58,8 +74,8 @@ class DocumentController extends Controller
 
     public function details(Request $request){
 
-        // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = $this->getenv('local');
+
         $id = $request->input('id');
 
         $data = Document::find($id);
@@ -158,8 +174,8 @@ class DocumentController extends Controller
 
     public function userdoc(Request $request){
 
-        // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = $this->getenv('local');
+
         $finalArray = array();
         $userid = $request->input('userid');
 
@@ -192,8 +208,7 @@ class DocumentController extends Controller
 
     public function detailstosign(Request $request){
 
-        // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = $this->getenv('local');
 
         $validator = validator::make($request->all(),
         [
@@ -284,8 +299,7 @@ class DocumentController extends Controller
 
     public function listtosign(Request $request){
 
-        // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = $this->getenv('local');
 
         $validator = validator::make($request->all(),
         [

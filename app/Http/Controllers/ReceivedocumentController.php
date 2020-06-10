@@ -67,7 +67,7 @@ class ReceivedocumentController extends Controller
         // $env = 'http://engine-signature.test/';
         $env = 'http://52.74.178.166:82/';
 
-        $id = $request->input('id');
+        $id = $request->input('docid');
         $userid = $request->input('userid');
         $answer = null;
         $documentfile = $request->file('documentfile');

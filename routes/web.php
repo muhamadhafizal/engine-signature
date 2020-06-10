@@ -66,5 +66,9 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/verify', 'VerifyController@index');
     Route::post('/verify/requesttac', 'VerifyController@requesttac');
     Route::post('/verify/sendtac', 'VerifyController@sendtac');
+
+    //Category
+    Route::get('/category', 'CategoryController@index');
+    Route::get('/category/all', 'CategoryController@all');
     
 });

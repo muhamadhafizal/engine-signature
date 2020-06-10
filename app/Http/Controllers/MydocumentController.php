@@ -22,7 +22,7 @@ class MydocumentController extends Controller
 
         $finalArray = array();
 
-        $document = Document::where('userid',$userid)->whereNull('cc')->get();
+        $document = Document::where('userid',$userid)->whereNull('cc')->orderBy('created_at','DESC')->get();
 
         foreach($document as $data){
 
@@ -60,13 +60,22 @@ class MydocumentController extends Controller
     public function group(Request $request){
 
         $userid = $request->input('userid');
+        $categoryid = $request->input('categoryid');
         $finalArray = array();
         $tempArray = array();
 
         // $env = 'http://engine-signature.test/';
         $env = 'http://52.74.178.166:82/';
 
-        $document = Document::whereNotNull('cc')->where('status','finish')->get();
+        if($categoryid){
+
+            $document = Document::whereNotNull('cc')->where('category',$categoryid)->where('status','finish')->orderBy('created_at','DESC')->get();
+
+        } else {
+
+            $document = Document::whereNotNull('cc')->where('status','finish')->orderBy('created_at','DESC')->get();
+
+        }
 
         foreach($document as $data){  
             if($data->userid == $userid){
