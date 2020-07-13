@@ -319,14 +319,16 @@ class DocumentController extends Controller
                     $tempfile = $data->file;
                     $dirfile = $env . 'document/'. $tempfile;
 
+                    $category = Category::where('id',$data->category)->first();
+
                     if($data->cc){
                         $data->cc = json_decode($data->cc);
                     }
 
                     $tempArray = [
                         'id' => $data->id,
-                        'title' => $data->title,
                         'file' => $dirfile,
+                        'category' => $category->name,
                         'userid' => $data->userid,
                         'cc' => $data->cc,
                         'status' => $data->status,
