@@ -89,6 +89,9 @@ class MydocumentController extends Controller
         }
 
         foreach($document as $data){  
+            if($data->userid == $userid){
+                array_push($tempArray,$data);
+            }
             if($data->cc){
 
                 $a = $data->cc;
@@ -103,9 +106,6 @@ class MydocumentController extends Controller
                     }   
                 }
             }
-            if($data->userid == $userid){
-                array_push($tempArray,$data);
-            }
         }
 
         foreach($tempArray as $data){
@@ -115,6 +115,18 @@ class MydocumentController extends Controller
             $length = count($b['cc']);
 
             $category = Category::find($data->category);
+
+            $user = User::find($data->userid);
+
+            $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
+
+            $historycreated = [
+                'userid' => $user->id,
+                'name' => $user->name,
+                'time' => $time,
+            ];
+
+            array_push($historyArray,$historycreated);
     
             for($i=0; $i<$length; $i++){
                 $tempid = $b['cc'][$i]['id'];
@@ -130,20 +142,17 @@ class MydocumentController extends Controller
                 array_push($historyArray,$temphistoryArray);   
             }
 
+         
+
+            $ordered = array();
+            foreach ($historyArray as $event) {
+            $ordered[$event['time']] = $event;
+            
+            }
+            ksort($ordered);
+
             $tempfile = $data->file;
-            $dirfile = $env . 'document/'. $tempfile;
-
-            $user = User::find($data->userid);
-
-            $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
-
-            $historycreated = [
-                'userid' => $user->id,
-                'name' => $user->name,
-                'time' => $time,
-            ];
-
-            array_push($historyArray,$historycreated);
+            $dirfile = $env . 'document/'. $tempfile;            
 
             $tempArray = [
                 'id' => $data->id,
@@ -152,9 +161,10 @@ class MydocumentController extends Controller
                 'userid' => $data->userid,
                 'user created' => $user->name,
                 'status' => $data->status,
-                'history' => $historyArray,
+                'history' => $ordered,
             ];
             array_push($finalArray,$tempArray);
+         
         }
 
         $countarray = array();
