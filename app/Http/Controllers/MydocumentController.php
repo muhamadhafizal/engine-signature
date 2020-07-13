@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Document;
 use App\User;
+use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,6 +32,8 @@ class MydocumentController extends Controller
 
             $user = User::find($data->userid);
 
+            $category = Category::find($data->category);
+
             $time = date('Y-m-d h:i:sa', strtotime($data->updated_at));
 
             $historyArray = [
@@ -42,7 +45,7 @@ class MydocumentController extends Controller
             $tempArray = [
 
                 'id' => $data->id,
-                'title' => $data->title,
+                'category' => $category->name,
                 'file' => $dirfile,
                 'userid' => $data->userid,
                 'user created' => $user->name,
@@ -102,6 +105,8 @@ class MydocumentController extends Controller
             $a = $data->cc;
             $b = json_decode($a,true);
             $length = count($b['cc']);
+
+            $category = Category::find($data->category);
     
             for($i=0; $i<$length; $i++){
                 $tempid = $b['cc'][$i]['id'];
@@ -134,7 +139,7 @@ class MydocumentController extends Controller
 
             $tempArray = [
                 'id' => $data->id,
-                'title' => $data->title,
+                'category' => $category->name,
                 'file' => $dirfile,
                 'userid' => $data->userid,
                 'user created' => $user->name,
