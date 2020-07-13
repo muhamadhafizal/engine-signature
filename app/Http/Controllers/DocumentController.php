@@ -26,7 +26,6 @@ class DocumentController extends Controller
 
         $validator = validator::make($request->all(),
         [
-            'title' => 'required',
             'userid' => 'required',
             'categoryid' => 'required',
             'documentfile' => 'required|mimes:doc,docx,pdf',
@@ -36,7 +35,6 @@ class DocumentController extends Controller
             return response()->json($validator->errors(), 422);
         } else {
 
-            $title = $request->input('title');
             $userid = $request->input('userid');
             $documentfile = $request->file('documentfile');
             $cc = $request->input('cc');
@@ -56,7 +54,6 @@ class DocumentController extends Controller
             $documentfile->move($destinationPath, $filename);
 
             $document = new Document;
-            $document->title = $title;
             $document->file = $filename;
             $document->userid = $userid;
             $document->cc = $cc;
