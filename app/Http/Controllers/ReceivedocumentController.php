@@ -108,7 +108,7 @@ class ReceivedocumentController extends Controller
         $document->status = $status;
         $document->save();
 
-        return response()->json(['status'=>'success']);
+        return response()->json(['status'=>'success','value'=>'success update document']);
 
     }
 }
