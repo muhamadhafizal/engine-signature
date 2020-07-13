@@ -62,7 +62,7 @@ class LoginController extends Controller
 
             } else {
 
-                return response()->json(['status'=>'failed']);
+                return response()->json(['status'=>'failed', 'value'=>'invalid username or password']);
 
             }
 
