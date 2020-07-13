@@ -89,11 +89,13 @@ class DocumentController extends Controller
                 $cc = $data->cc;
             }
 
+            $category = Category::find($data->category);
+
         }
         
         $tempArray = [
             'id' => $data->id,
-            'title' => $data->title,
+            'category' => $category->name,
             'file' => $dirfile,
             'userid' => $data->userid,
             'cc' => $cc,
