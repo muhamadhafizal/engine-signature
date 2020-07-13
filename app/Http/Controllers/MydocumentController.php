@@ -57,7 +57,15 @@ class MydocumentController extends Controller
 
         }
 
-        return response()->json(['status'=>'success','value'=> $finalArray]);
+        $countarray = array();
+
+        $count = count($finalArray);
+        $countarray = [
+            'count' => $count,
+            'data' => $finalArray,
+        ];
+
+        return response()->json(['status'=>'success','value'=> $countarray]);
     }
 
     public function group(Request $request){
@@ -147,7 +155,15 @@ class MydocumentController extends Controller
                 'history' => $historyArray,
             ];
             array_push($finalArray,$tempArray);
-        }   
-        return response()->json(['status'=>'success', 'value'=>$finalArray]);
+        }
+
+        $countarray = array();
+
+        $count = count($finalArray);
+        $countarray = [
+            'count' => $count,
+            'data' => $finalArray,
+        ];
+        return response()->json(['status'=>'success', 'value'=>$countarray]);
     }
 }
