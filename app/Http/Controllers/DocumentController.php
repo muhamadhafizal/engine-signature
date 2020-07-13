@@ -83,14 +83,15 @@ class DocumentController extends Controller
             $tempfile = $data->file;
             $dirfile = $env . 'document/'. $tempfile;
 
+            //setting dekat sini
             if($data->cc){
                 $cc = json_decode($data->cc);
-            } else {
+            } else { 
                 $cc = $data->cc;
             }
 
             $category = Category::find($data->category);
-
+ 
         }
         
         $tempArray = [

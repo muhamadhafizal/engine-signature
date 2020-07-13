@@ -115,18 +115,20 @@ class MydocumentController extends Controller
             $length = count($b['cc']);
 
             $category = Category::find($data->category);
-
             $user = User::find($data->userid);
+            
+            //check category 2 / 3
+            if($data->category == '2'){
+                $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
 
-            $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
+                $historycreated = [
+                    'userid' => $user->id,
+                    'name' => $user->name,
+                    'time' => $time,
+                ];
 
-            $historycreated = [
-                'userid' => $user->id,
-                'name' => $user->name,
-                'time' => $time,
-            ];
-
-            array_push($historyArray,$historycreated);
+                array_push($historyArray,$historycreated);
+            }
     
             for($i=0; $i<$length; $i++){
                 $tempid = $b['cc'][$i]['id'];
@@ -150,6 +152,18 @@ class MydocumentController extends Controller
             
             }
             ksort($ordered);
+            $finalsortarray = array();
+            foreach($ordered as $history){
+                
+                $tempsort = [
+                    'userid' => $history['userid'],
+                    'name' => $history['name'],
+                    'time' => $history['time'],
+                ];
+
+                array_push($finalsortarray,$tempsort);
+
+            }
 
             $tempfile = $data->file;
             $dirfile = $env . 'document/'. $tempfile;            
@@ -161,7 +175,7 @@ class MydocumentController extends Controller
                 'userid' => $data->userid,
                 'user created' => $user->name,
                 'status' => $data->status,
-                'history' => $ordered,
+                'history' => $finalsortarray,
             ];
             array_push($finalArray,$tempArray);
          
