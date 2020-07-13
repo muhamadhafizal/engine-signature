@@ -89,9 +89,6 @@ class MydocumentController extends Controller
         }
 
         foreach($document as $data){  
-            if($data->userid == $userid){
-                array_push($tempArray,$data);
-            }
             if($data->cc){
 
                 $a = $data->cc;
@@ -105,6 +102,9 @@ class MydocumentController extends Controller
                         }
                     }   
                 }
+            }
+            if($data->userid == $userid){
+                array_push($tempArray,$data);
             }
         }
 
