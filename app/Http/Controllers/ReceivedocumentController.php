@@ -58,7 +58,16 @@ class ReceivedocumentController extends Controller
 
             array_push($documentArray,$filterArray);
         }
-        return response()->json(['status'=>'success', 'value'=>$documentArray]);
+        //count documentarray
+        $count = count($documentArray);
+
+        $finalarray = array();
+        $finalarray = [
+            'count' => $count,
+            'data' => $documentArray,
+        ];
+
+        return response()->json(['status'=>'success', 'value'=>$finalarray]);
 
     }
 
