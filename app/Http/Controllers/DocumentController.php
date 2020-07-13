@@ -63,7 +63,7 @@ class DocumentController extends Controller
 
             $document->save();
 
-            return response()->json(['status'=>'success']);
+            return response()->json(['status'=>'success','value'=>'success upload document']);
 
         }
 
