@@ -18,6 +18,8 @@ class DocumentController extends Controller
         } else {
             $env = 'http://52.74.178.166:82/';
         }
+
+        return $env;
     }
     
     public function index(){
@@ -87,6 +89,7 @@ class DocumentController extends Controller
 
         $tempfile = $data->file;
         $dirfile = $env . 'document/'. $tempfile;
+   
 
         if($data->category == '1'){
 
