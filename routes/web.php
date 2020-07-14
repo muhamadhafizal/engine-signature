@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth:api','token']], function(){
 
 
     //document
-    Route::get('/document', 'DocumentController@index');
+    Route::get('/document/index', 'DocumentController@index');
     Route::post('/document/add', 'DocumentController@store');
     Route::get('/document/details', 'DocumentController@details');
     Route::post('/document/edit', 'DocumentController@update');

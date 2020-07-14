@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Document;
 use App\History;
 use App\Category;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -73,33 +74,115 @@ class DocumentController extends Controller
     public function details(Request $request){
 
         $env = $this->getenv('live');
-
         $id = $request->input('id');
+
+        $historyArray = array();
 
         $data = Document::find($id);
 
-        if($data){
+        $category = Category::find($data->category);
+        $user = User::find($data->userid);
 
-            $tempfile = $data->file;
-            $dirfile = $env . 'document/'. $tempfile;
+        $time = date('Y-m-d h:i:sa', strtotime($data->created_at));
 
-            //setting dekat sini
-            if($data->cc){
-                $cc = json_decode($data->cc);
-            } else { 
-                $cc = $data->cc;
+        $tempfile = $data->file;
+        $dirfile = $env . 'document/'. $tempfile;
+
+        if($data->category == '1'){
+
+            $tempArray = [
+                'userid' => $user->id,
+                'name' => $user->name,
+                'time' => $time,
+            ];
+
+            array_push($historyArray,$tempArray);
+
+        } elseif($data->category == '2'){
+
+            $a = $data->cc;
+            $b = json_decode($a,true);
+            $length = count($b['cc']);
+
+            $tempArray = [
+                'userid' => $user->id,
+                'name' => $user->name,
+                'time' => $time,
+            ];
+
+            array_push($historyArray,$tempArray);
+
+            for($i=0; $i<$length; $i++){
+                $tempid = $b['cc'][$i]['id'];
+                $tempuser = User::find($tempid);
+                
+                $timecc = $b['cc'][$i]['time'];
+
+                $temphistoryArray = [
+                    'userid' => $tempuser->id,
+                    'name' => $tempuser->name,
+                    'time' => $timecc,
+                ];
+                array_push($historyArray,$temphistoryArray);   
             }
 
-            $category = Category::find($data->category);
- 
+        } else{
+
+            $a = $data->cc;
+            $b = json_decode($a,true);
+            $length = count($b['cc']);
+
+            for($i=0; $i<$length; $i++){
+                $tempid = $b['cc'][$i]['id'];
+                $tempuser = User::find($tempid);
+                
+                $timecc = $b['cc'][$i]['time'];
+
+                $temphistoryArray = [
+                    'userid' => $tempuser->id,
+                    'name' => $tempuser->name,
+                    'time' => $timecc,
+                ];
+                array_push($historyArray,$temphistoryArray);   
+            }
+
         }
+
+        $finalsortarray = array();
+
+        if($data->status == 'finish'){
+            $ordered = array();
+            foreach ($historyArray as $event) {
+                
+                $ordered[$event['time']] = $event;
+                
+            }
+            ksort($ordered);
+           
+            foreach($ordered as $history){
+                    
+                $tempsort = [
+                    'userid' => $history['userid'],
+                    'name' => $history['name'],
+                    'time' => $history['time'],
+                ];
+    
+                    array_push($finalsortarray,$tempsort);
+    
+            }
+
+        } else {
+            $finalsortarray = $historyArray;
+        }
+
+       
         
         $tempArray = [
             'id' => $data->id,
             'category' => $category->name,
             'file' => $dirfile,
             'userid' => $data->userid,
-            'cc' => $cc,
+            'history' => $finalsortarray,
             'status' => $data->status,
         ];
 
