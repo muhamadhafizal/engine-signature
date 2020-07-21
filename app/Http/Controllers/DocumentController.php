@@ -31,7 +31,6 @@ class DocumentController extends Controller
         $validator = validator::make($request->all(),
         [
             'userid' => 'required',
-            'categoryid' => 'required',
             'documentfile' => 'required|mimes:doc,docx,pdf',
         ]);
 
@@ -42,13 +41,7 @@ class DocumentController extends Controller
             $userid = $request->input('userid');
             $documentfile = $request->file('documentfile');
             $cc = $request->input('cc');
-            $categoryid = $request->input('categoryid');
-
-            if($categoryid == '3'){
-                $tempstatus = 'success';
-            } else {
-                $tempstatus = 'process';
-            }
+         
             
             $status = 'process';
             $extenstion = $documentfile->getClientOriginalExtension();
@@ -62,8 +55,6 @@ class DocumentController extends Controller
             $document->userid = $userid;
             $document->cc = $cc;
             $document->status = $status;
-            $document->tempstatus = $tempstatus;
-            $document->category = $categoryid;
 
             $document->save();
 
@@ -434,6 +425,72 @@ class DocumentController extends Controller
             }
 
         }
+    }
+
+    public function listdocument(Request $request){
+
+        $status = $request->input('status');
+        $userid = $request->input('userid');
+
+        $env = $this->getenv('live');
+
+        $totalarray = array();
+        $valuearray = array();
+        $listarray = array();
+        $finalarray = array();
+
+        $documentprocess = Document::where('status','process')->where('userid',$userid)->orderBy('created_at','DESC')->get();
+
+        $documentrejected = Document::where('status','rejected')->where('userid',$userid)->orderBy('created_at','DESC')->get();
+
+        $documentcompleted = Document::where('status','completed')->where('userid',$userid)->orderBy('created_at','DESC')->get();
+
+        $totalprocess = count($documentprocess);
+        $totalrejected = count($documentrejected);
+        $totalcompleted = count($documentcompleted);
+
+        $totalarray = [
+
+            'totalprocess' => $totalprocess,
+            'totalrejected' => $totalrejected,
+            'totalcompleted' => $totalcompleted,
+
+        ];
+
+        //list document based on status
+        if($status == 'process'){
+            $tempdocument = $documentprocess;
+        } elseif($status == 'rejected'){
+            $tempdocument = $documentrejected;
+        } else{
+            $tempdocument = $documentcompleted;
+        }
+
+        foreach($tempdocument as $data){
+            $temp = explode(' ',$data->updated_at);
+
+            $tempfile = $data->file;
+            $dirfile = $env . 'document/'. $tempfile;
+            
+            $valuearray = [
+                'id' => $data->id,
+                'file' => $dirfile,
+                'date' => $temp[0],
+                'time' => $temp[1],
+            ];
+
+            array_push($listarray,$valuearray);
+            
+        }
+
+        $finalarray = [
+            'count' => $totalarray,
+            'listbystatus' => $listarray, 
+        ];
+
+        return response()->json(['status'=>'success', 'value'=>$finalarray]);
+        
+
     }
    
 }

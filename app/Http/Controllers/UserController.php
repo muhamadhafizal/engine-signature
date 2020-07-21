@@ -27,6 +27,7 @@ class UserController extends Controller
 				'email' => 'required',
                 'password' => 'required',
                 'phone' => 'required',
+                'role' => 'required',
 
 			]);
 
@@ -40,6 +41,7 @@ class UserController extends Controller
             $email = $request->input('email');
             $password = $request->input('password');
             $phone = $request->input('phone');
+            $role = $request->input('role');
 
             $userExist = User::where('email',$email)->orWhere('phone',$phone)->first();
             if($userExist){
@@ -54,6 +56,7 @@ class UserController extends Controller
                 $user->email = $email;
                 $user->password = $password;
                 $user->phone = $phone;
+                $user->role = $role;
 
                 $user->save();
 
@@ -81,6 +84,7 @@ class UserController extends Controller
         $phone = $request->input('phone');
         $email = $request->input('email');
         $password = $request->input('password');
+        $role = $request->input('role');
 
         $user = User::find($userid);
 
@@ -96,11 +100,15 @@ class UserController extends Controller
         if(is_null($password)){
             $password = $user->password;
         }
+        if(is_null($role)){
+            $role = $user->role;
+        }
 
         $user->name = $name;
         $user->phone = $phone;
         $user->email = $email;
         $user->password = $password;
+        $user->role = $role;
 
         $user->save();
 

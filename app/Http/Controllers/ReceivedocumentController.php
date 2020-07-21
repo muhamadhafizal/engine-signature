@@ -45,15 +45,30 @@ class ReceivedocumentController extends Controller
 
             $tempfile = $data->file;
             $dirfile = $env . 'document/'. $tempfile;
-            $cc = json_decode($data->cc);
 
+            if($data->cc){
+
+                $a = $data->cc;
+                $b = json_decode($a,true);
+                $length = count($b['cc']);
+
+                for($i=0; $i<$length; $i++){
+                    if($userid == $b['cc'][$i]['id']){
+                        $coordinatex = $b['cc'][$i]['coordinatex'];
+                        $coordinatey = $b['cc'][$i]['coordinatey'];
+                    }   
+                }
+            }
+          
+            $temp = explode(' ',$data->updated_at);
+            
             $filterArray = [
                 'id' => $data->id,
-                'title' => $data->title,
                 'file' => $dirfile,
-                'userid' => $data->userid,
-                'cc' => $cc,
-                'status' => $data->status,
+                'coordinatex' => $coordinatex,
+                'coordinatey' => $coordinatey,
+                'date' => $temp[0],
+                'time' => $temp[1],
             ];
 
             array_push($documentArray,$filterArray);
@@ -71,15 +86,15 @@ class ReceivedocumentController extends Controller
 
     }
 
-    public function userupdate(Request $request){
+    public function userapprove(Request $request){
 
         // $env = 'http://engine-signature.test/';
         $env = 'http://52.74.178.166:82/';
 
         $id = $request->input('docid');
         $userid = $request->input('userid');
-        $answer = null;
         $documentfile = $request->file('documentfile');
+        $answer = null;
 
         $document = Document::find($id);
 
@@ -96,7 +111,6 @@ class ReceivedocumentController extends Controller
         for($i=0; $i<$length; $i++){
             if($userid == $b['cc'][$i]['id']){   
                 $b['cc'][$i]['status'] = 'success';
-                $b['cc'][$i]['time'] = date("Y-m-d h:i:sa");
             }
 
             if($b['cc'][$i]['status'] != 'success'){
@@ -107,7 +121,7 @@ class ReceivedocumentController extends Controller
         if($answer == 'process'){
             $status = 'process';
         } else {
-            $status = 'finish';
+            $status = 'completed';
         }
 
         $c = json_encode($b);
@@ -117,7 +131,98 @@ class ReceivedocumentController extends Controller
         $document->status = $status;
         $document->save();
 
+        $history = new History;
+        $history->userid = $userid;
+        $history->docid = $id;
+        $history->filename = $filename;
+        $history->status = 'approve';
+        $history->save();
+
         return response()->json(['status'=>'success','value'=>'success update document']);
 
+    }
+
+    public function userrejected(Request $request){
+
+        $id = $request->input('docid');
+        $userid = $request->input('userid');
+        $documentfile = $request->file('documentfile');
+
+        $document = Document::find($id);
+
+        if($documentfile){
+
+            $extenstion = $documentfile->getClientOriginalExtension();
+            $filename = rand(11111, 99999) . '.' . $extenstion;
+            $destinationPath = 'document';
+
+            $documentfile->move($destinationPath, $filename);
+
+        } else {
+            $filename = $document->file;
+        }
+
+        $document->status = 'rejected';
+        $document->file = $filename;
+
+        $document->save();
+
+        $history = new History;
+        $history->userid = $userid;
+        $history->filename = $filename;
+        $history->status = 'rejected';
+        $history->docid = $id;
+
+        $history->save();
+
+        return response()->json(['status'=>'success','value'=>'success user reject document']);
+
+    }
+
+    public function requesterupdate(Request $request){
+
+        $docid = $request->input('docid');
+        $userid = $request->input('userid');
+        $documentfile = $request->file('documentfile');
+
+        $document = Document::find($docid);
+
+        //file
+        $extenstion = $documentfile->getClientOriginalExtension();
+        $filename = rand(11111, 99999) . '.' . $extenstion;
+        $destinationPath = 'document';
+
+        $documentfile->move($destinationPath, $filename);
+
+        //status
+        $status = 'process';
+
+        //cc
+        $a = $document->cc;
+        $b = json_decode($a,true);
+        $length = count($b['cc']);
+
+        for($i=0; $i<$length; $i++){
+          
+            $b['cc'][$i]['status'] = 'process';
+
+        }
+
+        $c = json_encode($b);
+        
+        $document->file = $filename;
+        $document->status = $status;
+        $document->cc = $c;
+
+        $history = new History;
+        $history->userid = $userid;
+        $history->docid = $docid;
+        $history->status = 'resubmit';
+        $history->filename = $filename;
+
+        $document->save();
+        $history->save();
+
+        return response()->json(['status'=>'success','value'=>'success update document']);
     }
 }

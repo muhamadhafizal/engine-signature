@@ -27,6 +27,12 @@ Route::delete('/user/delete', 'UserController@destroy');
 Route::get('/login', 'LoginController@index');
 Route::post('/login', 'LoginController@main');
 
+//History
+Route::get('/history', 'HistoryController@index');
+Route::get('/history/info', 'HistoryController@info');
+
+Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
+
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
 Route::group(['middleware' => ['auth:api','token']], function(){
@@ -51,11 +57,13 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/document/detailstosign', 'DocumentController@detailstosign');
     Route::post('/document/successsign', 'DocumentController@successsign');
     Route::get('/document/listtosign', 'DocumentController@listtosign');
+    Route::get('/document/listdocument', 'DocumentController@listdocument');
 
     //receive document
     Route::get('/receivedocument', 'ReceivedocumentController@index');
     Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
-    Route::post('/receivedocument/userupdate', 'ReceivedocumentController@userupdate');
+    Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userupdate');
+    Route::post('/receivedocument/userrejected', 'ReceivedocumentController@userrejected');
 
     //mydocument
     Route::get('/mydocument', 'MydocumentController@index');
