@@ -61,7 +61,7 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     //receive document
     Route::get('/receivedocument', 'ReceivedocumentController@index');
     Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
-    Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userupdate');
+    Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userapprove');
     Route::post('/receivedocument/userrejected', 'ReceivedocumentController@userrejected');
     Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
 
