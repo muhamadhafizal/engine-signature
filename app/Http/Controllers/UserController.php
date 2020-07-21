@@ -15,7 +15,17 @@ class UserController extends Controller
 
         $user = User::all();
 
-        return response()->json($user);
+        return response()->json(['status'=>'success','value'=>$user]);
+
+    }
+
+    public function userrole(Request $request){
+
+        $role = $request->input('role');
+
+        $users = User::where('role',$role)->get();
+
+        return response()->json(['status'=>'success','value'=>$users]);
 
     }
 

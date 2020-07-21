@@ -22,6 +22,7 @@ Route::post('/user/register', 'UserController@add');
 Route::get('/user/profile', 'UserController@profile');
 Route::post('/user/edit', 'UserController@update');
 Route::delete('/user/delete', 'UserController@destroy');
+Route::get('user/role', 'UserController@userrole');
 
 //Login
 Route::get('/login', 'LoginController@index');
@@ -30,8 +31,6 @@ Route::post('/login', 'LoginController@main');
 //History
 Route::get('/history', 'HistoryController@index');
 Route::get('/history/info', 'HistoryController@info');
-
-Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
@@ -64,6 +63,7 @@ Route::group(['middleware' => ['auth:api','token']], function(){
     Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
     Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userupdate');
     Route::post('/receivedocument/userrejected', 'ReceivedocumentController@userrejected');
+    Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
 
     //mydocument
     Route::get('/mydocument', 'MydocumentController@index');
