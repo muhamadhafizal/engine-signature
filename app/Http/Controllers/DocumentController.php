@@ -42,7 +42,12 @@ class DocumentController extends Controller
             $documentfile = $request->file('documentfile');
             $cc = $request->input('cc');
          
-            
+            $a = json_decode($cc,true);
+            print_r($a['cc'][0]['turn']);
+
+            $a['cc'][0]['turn'] = 'active';
+
+            $b = json_encode($a);
             $status = 'process';
             $extenstion = $documentfile->getClientOriginalExtension();
             $filename = rand(11111, 99999) . '.' . $extenstion;
@@ -53,7 +58,7 @@ class DocumentController extends Controller
             $document = new Document;
             $document->file = $filename;
             $document->userid = $userid;
-            $document->cc = $cc;
+            $document->cc = $b;
             $document->status = $status;
 
             $document->save();
