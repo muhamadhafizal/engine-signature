@@ -43,7 +43,6 @@ class DocumentController extends Controller
             $cc = $request->input('cc');
          
             $a = json_decode($cc,true);
-            print_r($a['cc'][0]['turn']);
 
             $a['cc'][0]['turn'] = 'active';
 

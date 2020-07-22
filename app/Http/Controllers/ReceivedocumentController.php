@@ -33,7 +33,7 @@ class ReceivedocumentController extends Controller
 
                 for($i=0; $i<$length; $i++){
                     if($userid == $b['cc'][$i]['id']){
-                        if($b['cc'][$i]['status'] != 'success'){
+                        if($b['cc'][$i]['status'] != 'success' && $b['cc'][$i]['turn'] == 'active'){
                             array_push($tempArray,$data);
                         }
                     }   
@@ -107,10 +107,17 @@ class ReceivedocumentController extends Controller
         $a = $document->cc;
         $b = json_decode($a,true);
         $length = count($b['cc']);
-
+        $endarray = $length - 1;
         for($i=0; $i<$length; $i++){
+           
             if($userid == $b['cc'][$i]['id']){   
                 $b['cc'][$i]['status'] = 'success';
+                $b['cc'][$i]['turn'] = '-';
+                
+                if($b['cc'][$i]['id'] != $endarray){
+                    $b['cc'][$i+1]['turn'] = 'active';
+                }
+                
             }
 
             if($b['cc'][$i]['status'] != 'success'){
@@ -125,7 +132,7 @@ class ReceivedocumentController extends Controller
         }
 
         $c = json_encode($b);
-        
+           
         $document->file = $filename;
         $document->cc = $c;
         $document->status = $status;
@@ -150,6 +157,23 @@ class ReceivedocumentController extends Controller
 
         $document = Document::find($id);
 
+        //get cc based on user id and update turn to -
+
+        $a = $document->cc;
+        $b = json_decode($a,true);
+        $length = count($b['cc']);
+        for($i=0; $i<$length; $i++){
+           
+            if($userid == $b['cc'][$i]['id']){   
+  
+                $b['cc'][$i]['turn'] = '-';
+                
+            }
+
+        }
+
+        $c = json_encode($b);
+        
         if($documentfile){
 
             $extenstion = $documentfile->getClientOriginalExtension();
@@ -164,6 +188,7 @@ class ReceivedocumentController extends Controller
 
         $document->status = 'rejected';
         $document->file = $filename;
+        $document->cc = $c;
 
         $document->save();
 
@@ -207,6 +232,8 @@ class ReceivedocumentController extends Controller
             $b['cc'][$i]['status'] = 'process';
 
         }
+
+        $b['cc'][0]['turn'] = 'active';
 
         $c = json_encode($b);
         
