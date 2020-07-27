@@ -28,24 +28,32 @@ class HistoryController extends Controller
                 ->select('documents.created_at as time','users.name as username')
                 ->where('documents.id',$docid)
                 ->first();
+        
+        if($document){
 
-        $temparray = [
-            'message' => 'created by '. $oridoc->username. ', '. $oridoc->time,
-        ];
-
-        array_push($finalarray,$temparray);
-
-        foreach($document as $data){
-
-            $tarray = [
-                'message' => $data->status. ' by ' .$data->username. ', ' .$data->created_at,
+            $temparray = [
+                'message' => 'created by '. $oridoc->username. ', '. $oridoc->time,
             ];
+    
+            array_push($finalarray,$temparray);
+    
+            foreach($document as $data){
+    
+                $tarray = [
+                    'message' => $data->status. ' by ' .$data->username. ', ' .$data->created_at,
+                ];
+    
+                array_push($finalarray,$tarray);
+    
+            }
+    
+            return response()->json(['status'=>'success','value'=>$finalarray]);
 
-            array_push($finalarray,$tarray);
+        } else {
+
+            return response()->json(['status'=>'failed','value'=>'sorry document not exist']);
 
         }
-
-        return response()->json(['status'=>'success','value'=>$finalarray]);
         
 
     }
