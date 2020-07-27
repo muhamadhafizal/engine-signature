@@ -29,7 +29,7 @@ class HistoryController extends Controller
                 ->where('documents.id',$docid)
                 ->first();
         
-        if($document){
+        if($oridoc != null){
 
             $temparray = [
                 'message' => 'created by '. $oridoc->username. ', '. $oridoc->time,
