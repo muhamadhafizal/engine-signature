@@ -98,54 +98,64 @@ class ReceivedocumentController extends Controller
 
         $document = Document::find($id);
 
-        $extenstion = $documentfile->getClientOriginalExtension();
-        $filename = rand(11111, 99999) . '.' . $extenstion;
-        $destinationPath = 'document';
-
-        $documentfile->move($destinationPath, $filename);
-
-        $a = $document->cc;
-        $b = json_decode($a,true);
-        $length = count($b['cc']);
-        $endarray = $length - 1;
-        for($i=0; $i<$length; $i++){
-           
-            if($userid == $b['cc'][$i]['id']){   
-                $b['cc'][$i]['status'] = 'success';
-                $b['cc'][$i]['turn'] = '-';
-                
-                if($b['cc'][$i]['id'] != $endarray){
-                    $b['cc'][$i+1]['turn'] = 'active';
+        if($document != null){
+            
+            $extenstion = $documentfile->getClientOriginalExtension();
+            $filename = rand(11111, 99999) . '.' . $extenstion;
+            $destinationPath = 'document';
+    
+            $documentfile->move($destinationPath, $filename);
+    
+            $a = $document->cc;
+            $b = json_decode($a,true);
+            $length = count($b['cc']);
+            $endarray = $length - 1;
+            for($i=0; $i<$length; $i++){
+               
+                if($userid == $b['cc'][$i]['id']){   
+                    $b['cc'][$i]['status'] = 'success';
+                    $b['cc'][$i]['turn'] = '-';
+                    
+                    if($b['cc'][$i]['id'] != $endarray){
+                        $b['cc'][$i+1]['turn'] = 'active';
+                    }
+                    
                 }
-                
+    
+                if($b['cc'][$i]['status'] != 'success'){
+                    $answer = 'process';
+                }
             }
-
-            if($b['cc'][$i]['status'] != 'success'){
-                $answer = 'process';
+    
+            if($answer == 'process'){
+                $status = 'process';
+            } else {
+                $status = 'completed';
             }
-        }
+    
+            $c = json_encode($b);
+               
+            $document->file = $filename;
+            $document->cc = $c;
+            $document->status = $status;
+            $document->save();
+    
+            $history = new History;
+            $history->userid = $userid;
+            $history->docid = $id;
+            $history->filename = $filename;
+            $history->status = 'approve';
+            $history->save();
+    
+            return response()->json(['status'=>'success','value'=>'success update document']);
 
-        if($answer == 'process'){
-            $status = 'process';
         } else {
-            $status = 'completed';
+
+            return response()->json(['status'=>'failed','value'=>'sorry document does not exist']);
+
         }
 
-        $c = json_encode($b);
-           
-        $document->file = $filename;
-        $document->cc = $c;
-        $document->status = $status;
-        $document->save();
-
-        $history = new History;
-        $history->userid = $userid;
-        $history->docid = $id;
-        $history->filename = $filename;
-        $history->status = 'approve';
-        $history->save();
-
-        return response()->json(['status'=>'success','value'=>'success update document']);
+       
 
     }
 
