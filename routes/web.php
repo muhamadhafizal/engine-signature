@@ -34,7 +34,7 @@ Route::get('/history/info', 'HistoryController@info');
 
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
-Route::group(['middleware' => ['auth:api','token']], function(){
+Route::group(['middleware' => ['auth:api','token','cors']], function(){
     
     //signature
     Route::get('/signature', 'SignatureController@index');
