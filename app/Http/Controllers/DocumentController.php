@@ -16,7 +16,7 @@ class DocumentController extends Controller
         if($type == 'local'){
             $env = 'http://engine-signature.test/';
         } else {
-            $env = 'http://52.74.178.166:82/';
+            $env = 'https://codeviable.com/engine-signature/public/';
         }
 
         return $env;

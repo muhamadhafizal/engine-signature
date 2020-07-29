@@ -16,7 +16,7 @@ class ReceivedocumentController extends Controller
     public function userrecdoc(Request $request){
         
         // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = 'https://codeviable.com/engine-signature/public/';
 
         $tempArray = array();
         $documentArray = array();
@@ -89,7 +89,7 @@ class ReceivedocumentController extends Controller
     public function userapprove(Request $request){
 
         // $env = 'http://engine-signature.test/';
-        $env = 'http://52.74.178.166:82/';
+        $env = 'https://codeviable.com/engine-signature/public/';
 
         $id = $request->input('docid');
         $userid = $request->input('userid');
