@@ -32,9 +32,14 @@ class VerifyController extends Controller
                 $phonenumber = $user->phone;
                 $finalformat = "'+6". $phonenumber . "'";
 
-                $token = "1f1e71629c01afcfd8748fc4eafaea4f";
+                $token = "1bd93086f764d299f09658444bc6f83f";
                 $twilio_sid = "AC422de66c95fa537a1772ed8aab0e2076";
                 $twilio_verify_sid = "VA89e10b75c7c9599aa120b7b7baa86066";
+
+                // $token = getenv("TWILIO_AUTH_TOKEN");
+                //  $twilio_sid = getenv("TWILIO_SID");
+                //  $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+
                 $twilio = new Client($twilio_sid, $token);
                 $twilio->verify->v2->services($twilio_verify_sid)
                 ->verifications
@@ -70,7 +75,7 @@ class VerifyController extends Controller
                 $phonenumber = $user->phone;
                 $finalformat = "'+6". $phonenumber . "'";
 
-                $token = "1f1e71629c01afcfd8748fc4eafaea4f";
+                $token = "1bd93086f764d299f09658444bc6f83f";
                 $twilio_sid = "AC422de66c95fa537a1772ed8aab0e2076";
                 $twilio_verify_sid = "VA89e10b75c7c9599aa120b7b7baa86066";
                 $twilio = new Client($twilio_sid, $token);
