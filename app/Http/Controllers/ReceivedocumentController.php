@@ -56,6 +56,7 @@ class ReceivedocumentController extends Controller
                     if($userid == $b['cc'][$i]['id']){
                         $coordinatex = $b['cc'][$i]['coordinatex'];
                         $coordinatey = $b['cc'][$i]['coordinatey'];
+                        $pages = $b['cc'][$i]['pages'];
                     }   
                 }
             }
@@ -67,6 +68,7 @@ class ReceivedocumentController extends Controller
                 'file' => $dirfile,
                 'coordinatex' => $coordinatex,
                 'coordinatey' => $coordinatey,
+                'pages' => $pages,
                 'date' => $temp[0],
                 'time' => $temp[1],
             ];

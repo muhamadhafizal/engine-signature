@@ -32,51 +32,54 @@ Route::post('/login', 'LoginController@main');
 Route::get('/history', 'HistoryController@index');
 Route::get('/history/info', 'HistoryController@info');
 
+//signature
+Route::get('/signature', 'SignatureController@index');
+    
+Route::get('/signature/details', 'SignatureController@details');
+Route::get('/signature/user', 'SignatureController@usersig');
+Route::delete('/signature/delete', 'SignatureController@destroy');
+Route::post('/signature/add', 'SignatureController@store');
+
+
+//document
+Route::get('/document/index', 'DocumentController@index');
+Route::post('/document/add', 'DocumentController@store');
+Route::get('/document/details', 'DocumentController@details');
+Route::post('/document/edit', 'DocumentController@update');
+Route::delete('/document/delete', 'DocumentController@destroy');
+Route::get('/document/all', 'DocumentController@all');
+Route::get('/document/user', 'DocumentController@userdoc');
+Route::get('/document/detailstosign', 'DocumentController@detailstosign');
+Route::post('/document/successsign', 'DocumentController@successsign');
+Route::get('/document/listtosign', 'DocumentController@listtosign');
+Route::get('/document/listdocument', 'DocumentController@listdocument');
+
+//receive document
+Route::get('/receivedocument', 'ReceivedocumentController@index');
+Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
+Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userapprove');
+Route::post('/receivedocument/userrejected', 'ReceivedocumentController@userrejected');
+Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
+
+//mydocument
+Route::get('/mydocument', 'MydocumentController@index');
+Route::get('/mydocument/personal', 'MydocumentController@personal');
+Route::get('/mydocument/group', 'MydocumentController@group');
+
+//verify
+Route::get('/verify', 'VerifyController@index');
+Route::post('/verify/requesttac', 'VerifyController@requesttac');
+Route::post('/verify/sendtac', 'VerifyController@sendtac');
+
+//Category
+Route::get('/category', 'CategoryController@index');
+Route::get('/category/all', 'CategoryController@all');
+
+
+//token configuration
 Route::get('unauthorized', ['as' => 'unauthorized', 'uses' => 'LoginController@unauthorized']);
 
 Route::group(['middleware' => ['auth:api','token']], function(){
     
-    //signature
-    Route::get('/signature', 'SignatureController@index');
-    
-    Route::get('/signature/details', 'SignatureController@details');
-    Route::get('/signature/user', 'SignatureController@usersig');
-    Route::delete('/signature/delete', 'SignatureController@destroy');
-    Route::post('/signature/add', 'SignatureController@store');
-
-
-    //document
-    Route::get('/document/index', 'DocumentController@index');
-    Route::post('/document/add', 'DocumentController@store');
-    Route::get('/document/details', 'DocumentController@details');
-    Route::post('/document/edit', 'DocumentController@update');
-    Route::delete('/document/delete', 'DocumentController@destroy');
-    Route::get('/document/all', 'DocumentController@all');
-    Route::get('/document/user', 'DocumentController@userdoc');
-    Route::get('/document/detailstosign', 'DocumentController@detailstosign');
-    Route::post('/document/successsign', 'DocumentController@successsign');
-    Route::get('/document/listtosign', 'DocumentController@listtosign');
-    Route::get('/document/listdocument', 'DocumentController@listdocument');
-
-    //receive document
-    Route::get('/receivedocument', 'ReceivedocumentController@index');
-    Route::get('/receivedocument/user', 'ReceivedocumentController@userrecdoc');
-    Route::post('/receivedocument/userapprove', 'ReceivedocumentController@userapprove');
-    Route::post('/receivedocument/userrejected', 'ReceivedocumentController@userrejected');
-    Route::post('/receivedocument/requesterupdate', 'ReceivedocumentController@requesterupdate');
-
-    //mydocument
-    Route::get('/mydocument', 'MydocumentController@index');
-    Route::get('/mydocument/personal', 'MydocumentController@personal');
-    Route::get('/mydocument/group', 'MydocumentController@group');
-
-    //verify
-    Route::get('/verify', 'VerifyController@index');
-    Route::post('/verify/requesttac', 'VerifyController@requesttac');
-    Route::post('/verify/sendtac', 'VerifyController@sendtac');
-
-    //Category
-    Route::get('/category', 'CategoryController@index');
-    Route::get('/category/all', 'CategoryController@all');
     
 });
